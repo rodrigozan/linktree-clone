@@ -1,0 +1,19 @@
+<app-header title={{title}}></app-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{ title }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div id="container">
+    <h3 class="capitalize">{{ title }}</h3>
+
+    <ion-list id="list" *ngFor="let link of links; let i = index">
+      <ion-item class="item"  [button]="true" (click)="goTo(link.link)">
+        <ion-label class="label">{{ link.text }}</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

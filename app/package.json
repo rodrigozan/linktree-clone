@@ -1,12 +1,13 @@
 {
   "name": "app",
   "version": "0.0.1",
+  "description": "An Ionic app to Linktree Clone Project",
   "author": {
     "name": "Rodrigo Zan",
     "email": "rodrigo.zandonadi.dev@gmail.com",
     "url": "https://github.com/rodrigozan"
   },
-  "homepage": "https://ionicframework.com/",
+  "homepage": "https://github.com/rodrigozan/linktree-clone",
   "scripts": {
     "ng": "ng",
     "build:prod": "ionic build --configuration=production",
@@ -65,6 +66,5 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.4.0"
-  },
-  "description": "An Ionic project"
+  }  
 }

@@ -1,2 +1,26 @@
-// For information on how to create your own theme, please see:
-// http://ionicframework.com/docs/theming/
+// Light theme
+.light-theme {
+  --ion-background-color: #ffffff;
+  --ion-text-color: #000000;
+  --ion-color-primary: #3880ff;
+  --ion-color-secondary: #3dc2ff;
+  --ion-color-tertiary: #5260ff;
+}
+
+// Kark theme
+.dark-theme {
+  --ion-background-color: linear-gradient(180deg, #3a3a3a 0%, #1e1e1e 100%);
+  --ion-text-color: #ffffff;
+  --ion-color-primary: #222428;
+  --ion-color-secondary: #383a3e;
+  --ion-color-tertiary: #4e5054;
+}
+
+// Red theme
+.red-theme {
+    --ion-background-color: linear-gradient(180deg, rgba(255, 10, 10, 1) 0%, rgba(241, 0, 0, 1) 40%, rgba(130, 5, 5, 1) 100%);
+    --ion-text-color: #000000;
+    --ion-color-primary: #3880ff;
+    --ion-color-secondary: #3dc2ff;
+    --ion-color-tertiary: #5260ff;
+  }

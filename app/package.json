@@ -12,8 +12,8 @@
     "ng": "ng",
     "build:prod": "ionic build --configuration=production",
     "build:dev": "ionic build --configuration=development",
-    "start:prod": "ionic serve --configuration=production",
-    "start:dev": "ionic serve --configuration=development",
+    "start:prod": "ionic serve --configuration=production --port=8200",
+    "start:dev": "ionic serve --configuration=development --port=8200",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint"

@@ -1,7 +1,11 @@
 {
   "name": "app",
   "version": "0.0.1",
-  "author": "Ionic Framework",
+  "author": {
+    "name": "Rodrigo Zan",
+    "email": "rodrigo.zandonadi.dev@gmail.com",
+    "url": "https://github.com/rodrigozan"
+  },
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",

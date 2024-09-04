@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model tb_rwms_users {
+model tb_lcms_users {
   id       Int      @id @default(autoincrement())
   name     String
   username String
@@ -16,4 +16,6 @@ model tb_rwms_users {
   celular  String
   active   Boolean  @default(false)
   role     String   @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }

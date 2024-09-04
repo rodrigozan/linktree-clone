@@ -19,10 +19,10 @@ export class UserService {
           @password = ${hashedPassword},
           @celular = ${celular},
           @active = ${active},
-          @role = ${role} 
+          @role = ${role}
     `;
 
-    return result;
+    return result[0];
   }
 
   static async get() {
@@ -62,8 +62,8 @@ export class UserService {
             @id = ${id},
             @name = ${name},
             @username = ${username},
-            @password = ${hashedPassword},
             @email = ${email},
+            @password = ${hashedPassword},            
             @celular = ${celular},
             @active = ${active},
             @role = ${role}
@@ -74,7 +74,7 @@ export class UserService {
 
   static async delete(id: number): Promise<IUser | null> {
     const result: any = await prisma.$queryRaw`
-        EXEC sp_lcms_delete_user @id = ${id}
+        EXEC sp_lcms_delete_users @id = ${id}
     `;
 
     return result

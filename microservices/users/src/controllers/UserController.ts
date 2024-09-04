@@ -1,7 +1,11 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
 import dotenv from 'dotenv'
-import * as bycrypt from 'bcryptjs'
+import https from 'https'
+
+const agent = new https.Agent({
+    rejectUnauthorized: false
+});
 
 dotenv.config()
 
@@ -13,21 +17,38 @@ class UserController {
     async create(req: Request, res: Response) {
         try {
             const data = req.body;
-            const user = await service.create(data);
+            const create_user = await service.create(data);
+            
+            const id = create_user?.id
+            console.log('id',id)
+
+            const user = await service.getById(Number(id))
+            .then(result => {return result})
+
             await axios.post(`${process.env.AUTH_URL}/CreateUser`, {
                 id: user?.id,
-                name: user?.name,
                 email: user?.email,
                 username: user?.username,
-                password: user?.password,
-                celular: user?.celular,
-                active: user?.active,
-                role: user?.role
-            });
+                password: user?.password
+            }, { httpsAgent: agent })
+            .then(result => console.log(result))
+            .catch(error => {
+                if (axios.isAxiosError(error)) {
+                    console.error('Axios error:', error.response?.data || error.message);
+                    return res.status(500).json({ 
+                        error: error.response?.data || error.message 
+                    });
+                } else {
+                    console.error('Other error:', error.message);
+                    return res.status(500).json({ error: error.message });
+                }
+            })
+            
+            console.log('user',user)
             return res.status(201).json({ message: 'User created succefull', created: user });
         } catch (error) {
             console.error('error', error)
-            return res.status(500).json({ error: error.message });
+            return res.status(500).json({ error: error.message  });
         }
     }
 
@@ -82,7 +103,7 @@ class UserController {
                 await axios.put(`${process.env.AUTH_URL}/UpdateeUser`, {
                     ...user,
                     id: Number(id)
-                });
+                }, { httpsAgent: agent });
             }
             return res.status(200).json({ message: 'User updated succefull', updated: user });
         } catch (error) {

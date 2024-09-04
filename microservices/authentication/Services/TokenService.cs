@@ -24,8 +24,8 @@ namespace authentication.Services
 
             var claims = new Claim[]
             {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.NameIdentifier, user.id.ToString()),
+            new Claim(ClaimTypes.Email, user.email),
             };
 
             var tokenDescriptor = new SecurityTokenDescriptor

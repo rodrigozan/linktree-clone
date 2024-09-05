@@ -6,11 +6,9 @@ namespace authentication.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        private readonly PasswordHasher _passwordHasher;
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, PasswordHasher passwordHasher)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            _passwordHasher = passwordHasher;
         }
 
         public DbSet<User> Users { get; set; }
@@ -22,19 +20,19 @@ namespace authentication.Data
             // Configuração das entidades (exemplo)
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Name)
-                      .IsRequired()
-                      .HasMaxLength(100);
-                entity.Property(e => e.Username)
+                entity.ToTable("tb_lcms_auth"); 
+                entity.HasKey(e => e.id);
+                entity.Property(e => e.username)
                     .IsRequired()
                     .HasMaxLength(50);
-                entity.Property(e => e.Email)
+                entity.Property(e => e.email)
                     .IsRequired()
                     .HasMaxLength(255);
-                entity.Property(e => e.Password)
+                entity.Property(e => e.password)
                     .IsRequired();
-                entity.Property(e => e.CreatedDate)
+                entity.Property(e => e.createdat)
+                      .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.updatedat)
                       .HasDefaultValueSql("CURRENT_TIMESTAMP");
             });
         }

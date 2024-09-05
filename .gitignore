@@ -1,29 +1,24 @@
-# Ignorar todos os diretórios node_modules em qualquer lugar do projeto
+#### GENERAL
+
 node_modules/
 
-# Ignorar arquivos de ambiente
-.env
-.env.production
-.env.development
-
-# Permitir que apenas o .env.example seja commitado
-!.env.example
-
-# Ignorar arquivos de ambiente específicos das pastas environments dentro de web e app
-
-environment.prod.ts
-environment.dev.ts
-
-# Permitir que apenas environments.example seja commitado
-!environment.example
-
-# Ignorar outros arquivos e diretórios comuns
 .DS_Store
 dist/
 build/
 tmp/
 *.log
 *.lock
+
+### API
+
+.env
+.env.production
+.env.development
+
+### APP and Web
+
+environment.prod.ts
+environment.dev.ts
 
 ### Microservices
 
@@ -32,4 +27,5 @@ tmp/
 .vs/
 obj/
 
-## User
+
+

@@ -1,25 +1,28 @@
-﻿using authentication.Data;
-using authentication.Models;
-using authentication.Services;
-
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
 
+using authentication.Data;
+using authentication.Models;
+using authentication.Services;
 namespace authentication.Controllers
 {
     [Route("[controller]")]
     public class AuthenticationController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly PasswordHasher _passwordHasher;
         private readonly TokenService _tokenService;
 
-        public AuthenticationController(ApplicationDbContext context, PasswordHasher passwordHasher, TokenService tokenService)
+        public AuthenticationController(ApplicationDbContext context, TokenService tokenService)
         {
             _context = context;
-            _passwordHasher = passwordHasher;
             _tokenService = tokenService;
+        }
+
+        private bool VerifyPasswordHash(string password, string storedHash)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, storedHash);
         }
 
         [HttpPost("Login")]
@@ -30,13 +33,19 @@ namespace authentication.Controllers
                 return BadRequest(ModelState.Values.SelectMany(v => v.Errors));
             }
 
-           var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == loginModel.Username || u.Email == loginModel.Email);
-            if (user == null || !_passwordHasher.VerifyPassword(loginModel.Password, user.Password))
+           var user = await _context.Users.FirstOrDefaultAsync(u => u.username == loginModel.username || u.email == loginModel.email);
+            if (user == null)
             {
-                return Unauthorized("Invalid username or password");
+                return Unauthorized("User not found");
+            }
+
+            if (!VerifyPasswordHash(loginModel.password, user.password))
+            {
+                return Unauthorized("Invalid Password");
             }
 
             var token = _tokenService.GenerateToken(user);
+
             return Ok(new { token = token });
 
         }
@@ -51,32 +60,41 @@ namespace authentication.Controllers
 
             var user = new User
             {
-                Id = createUserModel.Id, 
-                Email = createUserModel.Email,
-                Username = createUserModel.Username, 
-                Password = _passwordHasher.HashPassword(createUserModel.Password)
+                id = createUserModel.id, 
+                email = createUserModel.email,
+                username = createUserModel.username, 
+                password = createUserModel.password
             };
 
             _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            int rowsAffected = await _context.SaveChangesAsync();
 
-            return Ok(new { message = "User created successfully" });
+            if (rowsAffected != 1)
+            {
+                // Handle potential error during saving
+                return StatusCode(500, "An error occurred while creating the user.");
+            }
+
+            // Retrieve the newly created user from the database
+            User createdUser = _context.Users.FirstOrDefault(u => u.email == user.email);
+
+            return Ok(new { message = "User created successfully", user = createdUser });
         }
 
         [HttpPut("UpdateUser")]
         public async Task<IActionResult> UpdateUser([FromBody] User updateUserModel)
         {
-            var user = await _context.Users.FindAsync(updateUserModel.Id);
+            var user = await _context.Users.FindAsync(updateUserModel.id);
             if (user == null)
             {
                 return NotFound("User not found");
             }
 
-            user.Email = updateUserModel.Email;
+            user.email = updateUserModel.email;
 
-            if (!string.IsNullOrEmpty(updateUserModel.Password))
+            if (!string.IsNullOrEmpty(updateUserModel.password))
             {
-                user.Password = _passwordHasher.HashPassword(updateUserModel.Password);
+                user.password = updateUserModel.password;
             }
 
             _context.Users.Update(user);

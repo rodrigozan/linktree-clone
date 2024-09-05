@@ -31,7 +31,7 @@ class UserController {
                 username: user?.username,
                 password: user?.password
             }, { httpsAgent: agent })
-            .then(result => console.log(result))
+            .then(result => console.log({result: 'Result of Auth MS', message: result.data.message, data: result.data.user}))
             .catch(error => {
                 if (axios.isAxiosError(error)) {
                     console.error('Axios error:', error.response?.data || error.message);
@@ -40,12 +40,12 @@ class UserController {
                     });
                 } else {
                     console.error('Other error:', error.message);
-                    return res.status(500).json({ error: error.message });
+                    return res.status(500).json({ error: error.message })
                 }
             })
             
-            console.log('user',user)
-            return res.status(201).json({ message: 'User created succefull', created: user });
+            console.log('Result of User MS',user)
+            return res.status(201).json({ result: 'Result of User MS', message: 'User created succefull', created: user });
         } catch (error) {
             console.error('error', error)
             return res.status(500).json({ error: error.message  });

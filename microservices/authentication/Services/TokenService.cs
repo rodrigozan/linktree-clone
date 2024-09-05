@@ -19,8 +19,12 @@ namespace authentication.Services
         public string
      GenerateToken(User user)
         {
-            var signingKey
-     = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));
+            if (user == null || string.IsNullOrEmpty(user.email) || user.id == 0)
+            {
+                throw new ArgumentNullException("Invalid infos to generate token: user or email can't null");
+            }
+
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));
 
             var claims = new Claim[]
             {
@@ -31,8 +35,7 @@ namespace authentication.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration["Jwt:TokenExpireMinutes"])),
-
+                Expires = DateTime.UtcNow.AddDays(30),
                 SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256Signature)
             };
 

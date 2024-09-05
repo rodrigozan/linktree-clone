@@ -24,3 +24,12 @@ build/
 tmp/
 *.log
 *.lock
+
+### Microservices
+
+## Authentication - .NET Core
+
+.vs/
+obj/
+
+## User
